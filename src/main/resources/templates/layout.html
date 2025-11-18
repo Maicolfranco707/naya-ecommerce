@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naya Natural Cosmetics</title>
+    <link rel="icon" type="image/x-icon" href="/imagenes/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-black: #000000;
+            --rose-gold: #C9A687;
+            --rose-gold-light: #D4B59E;
+            --cream: #F5F1ED;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+        }
+        
+        .navbar-dark {
+            background-color: var(--primary-black) !important;
+        }
+        
+        .btn-rose-gold {
+            background-color: var(--rose-gold);
+            color: #000;
+            border: none;
+        }
+        
+        .btn-rose-gold:hover {
+            background-color: var(--rose-gold-light);
+            color: #000;
+        }
+        
+        .text-rose-gold {
+            color: var(--rose-gold);
+        }
+        
+        .bg-cream {
+            background-color: var(--cream);
+        }
+        
+        .product-card {
+            transition: transform 0.3s;
+            border: 2px solid var(--cream);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(201, 166, 135, 0.3);
+        }
+        
+        .badge-cart {
+            background-color: var(--rose-gold);
+            color: #000;
+        }
+        
+        footer {
+            background-color: var(--primary-black);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fs-3 fw-bold text-uppercase" href="/" style="letter-spacing: 3px; color: var(--rose-gold);">
+                NY NAYA
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productos">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productos?categoria=CAPILAR">Capilar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productos?categoria=CORPORAL">Corporal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="/carrito">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span th:if="${cantidadCarrito > 0}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-cart" th:text="${cantidadCarrito}">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido -->
+    <div th:replace="${content}"></div>
+
+    <!-- Footer -->
+    <footer class="py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 text-center text-md-start mb-3">
+                    <h5 style="color: var(--rose-gold);">Naya Natural Cosmetics</h5>
+                    <p class="mb-0">Renovación Profunda en Tu Piel</p>
+                </div>
+                <div class="col-md-4 text-center mb-3">
+                    <h6>Síguenos</h6>
+                    <a href="https://instagram.com/naya_naturalcosmetics" target="_blank" class="text-white me-3">
+                        <i class="fab fa-instagram fa-2x"></i>
+                    </a>
+                    <a href="https://facebook.com/nayanatural" target="_blank" class="text-white me-3">
+                        <i class="fab fa-facebook fa-2x"></i>
+                    </a>
+                    <a href="https://wa.me/573042051221" target="_blank" class="text-white">
+                        <i class="fab fa-whatsapp fa-2x"></i>
+                    </a>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <p class="mb-0">📍 Medellín, Colombia</p>
+                    <p class="mb-0">📱 304 205 1221</p>
+                </div>
+            </div>
+            <hr style="border-color: var(--rose-gold);">
+            <p class="text-center mb-0">&copy; 2024 Naya Natural Cosmetics. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/573042051221?text=Hola%20Naya,%20me%20interesa%20conocer%20más%20sobre%20sus%20productos" 
+       class="btn btn-success position-fixed rounded-circle" 
+       style="bottom: 30px; right: 30px; width: 60px; height: 60px; z-index: 1000;"
+       target="_blank">
+        <i class="fab fa-whatsapp fa-2x"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

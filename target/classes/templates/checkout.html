@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - Naya</title>
+    <link rel="icon" type="image/x-icon" href="/imagenes/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            color: #1a1a1a;
+        }
+
+        body.dark-theme {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+        }
+
+        .header {
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .light-theme .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(201, 166, 135, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-theme .header {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 1px solid rgba(201, 166, 135, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #C9A687;
+            text-decoration: none;
+            letter-spacing: 3px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #C9A687;
+            letter-spacing: 5px;
+            margin-bottom: 3rem;
+        }
+
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        .checkout-form {
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .light-theme .checkout-form {
+            background: #ffffff;
+            border: 1px solid rgba(201, 166, 135, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-theme .checkout-form {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(201, 166, 135, 0.2);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #C9A687;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .light-theme .form-label {
+            color: #666;
+        }
+
+        .dark-theme .form-label {
+            color: #aaaaaa;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .light-theme .form-input,
+        .light-theme .form-select,
+        .light-theme .form-textarea {
+            background: #f5f5f5;
+            border: 1px solid rgba(201, 166, 135, 0.3);
+            color: #1a1a1a;
+        }
+
+        .dark-theme .form-input,
+        .dark-theme .form-select,
+        .dark-theme .form-textarea {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(201, 166, 135, 0.3);
+            color: #ffffff;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #C9A687;
+            box-shadow: 0 0 10px rgba(201, 166, 135, 0.2);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .payment-option {
+            position: relative;
+        }
+
+        .payment-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .payment-label {
+            display: block;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .light-theme .payment-label {
+            background: #f5f5f5;
+            border: 2px solid rgba(201, 166, 135, 0.3);
+            color: #666;
+        }
+
+        .dark-theme .payment-label {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(201, 166, 135, 0.3);
+            color: #aaaaaa;
+        }
+
+        .payment-option input[type="radio"]:checked + .payment-label {
+            border-color: #C9A687;
+            background: rgba(201, 166, 135, 0.1);
+            color: #C9A687;
+        }
+
+        .payment-label:hover {
+            border-color: #C9A687;
+        }
+
+        .order-summary {
+            border-radius: 15px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            transition: all 0.3s;
+        }
+
+        .light-theme .order-summary {
+            background: #ffffff;
+            border: 1px solid rgba(201, 166, 135, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-theme .order-summary {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(201, 166, 135, 0.2);
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            color: #C9A687;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .summary-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(201, 166, 135, 0.1);
+        }
+
+        .summary-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .summary-item-details {
+            flex: 1;
+        }
+
+        .summary-item-name {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            transition: all 0.3s;
+        }
+
+        .light-theme .summary-item-name {
+            color: #1a1a1a;
+        }
+
+        .dark-theme .summary-item-name {
+            color: #ffffff;
+        }
+
+        .summary-item-quantity {
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .light-theme .summary-item-quantity {
+            color: #666;
+        }
+
+        .dark-theme .summary-item-quantity {
+            color: #aaaaaa;
+        }
+
+        .summary-item-price {
+            color: #C9A687;
+            font-weight: 600;
+        }
+
+        .summary-totals {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(201, 166, 135, 0.2);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .summary-label {
+            transition: all 0.3s;
+        }
+
+        .light-theme .summary-label {
+            color: #666;
+        }
+
+        .dark-theme .summary-label {
+            color: #aaaaaa;
+        }
+
+        .summary-value {
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .light-theme .summary-value {
+            color: #1a1a1a;
+        }
+
+        .dark-theme .summary-value {
+            color: #ffffff;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(201, 166, 135, 0.2);
+        }
+
+        .total-label {
+            color: #C9A687;
+        }
+
+        .total-value {
+            color: #C9A687;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #C9A687 0%, #B89578 100%);
+            color: #ffffff;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 15px rgba(201, 166, 135, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(201, 166, 135, 0.4);
+        }
+
+        @media (max-width: 968px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+                order: -1;
+            }
+
+            .payment-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .checkout-form,
+            .order-summary {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">NY NAYA</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">FINALIZAR COMPRA</h1>
+
+        <div class="checkout-content">
+            <form th:action="@{/pedido/procesar}" method="post" class="checkout-form">
+                <div class="form-section">
+                    <h2 class="section-title">INFORMACIÓN PERSONAL</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo *</label>
+                        <input type="text" name="nombre" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Teléfono / WhatsApp *</label>
+                        <input type="tel" name="telefono" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">DIRECCIÓN DE ENVÍO</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Dirección Completa *</label>
+                        <input type="text" name="direccion" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Barrio / Sector</label>
+                        <input type="text" name="barrio" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Observaciones de Entrega</label>
+                        <textarea name="observaciones" class="form-textarea" placeholder="Ejemplo: Casa amarilla, portón negro, timbre no funciona..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">MÉTODO DE PAGO</h2>
+                    
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" name="metodoPago" value="EFECTIVO" id="efectivo" checked>
+                            <label for="efectivo" class="payment-label">💵 Efectivo</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" name="metodoPago" value="TRANSFERENCIA" id="transferencia">
+                            <label for="transferencia" class="payment-label">🏦 Transferencia</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" name="metodoPago" value="DEBITO" id="debito">
+                            <label for="debito" class="payment-label">💳 Débito</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" name="metodoPago" value="CREDITO" id="credito">
+                            <label for="credito" class="payment-label">💳 Crédito</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">CONFIRMAR PEDIDO</button>
+            </form>
+
+            <div class="order-summary">
+                <h2 class="summary-title">TU PEDIDO</h2>
+
+                <div th:each="item : ${items}" class="summary-item">
+                    <img th:src="${item.imagen}" th:alt="${item.nombre}" class="summary-item-image">
+                    <div class="summary-item-details">
+                        <div class="summary-item-name" th:text="${item.nombre}">Producto</div>
+                        <div class="summary-item-quantity" th:text="'Cantidad: ' + ${item.cantidad}">Cantidad: 1</div>
+                    </div>
+                    <div class="summary-item-price" th:text="'$' + ${#numbers.formatDecimal(item.precio * item.cantidad, 0, 'COMMA', 0, 'POINT')}">$0</div>
+                </div>
+
+                <div class="summary-totals">
+                    <div class="summary-row">
+                        <span class="summary-label">Subtotal:</span>
+                        <span class="summary-value" th:text="'$' + ${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')}">$0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Envío:</span>
+                        <span class="summary-value">A calcular</span>
+                    </div>
+                    <div class="summary-total">
+                        <span class="total-label">TOTAL:</span>
+                        <span class="total-value" th:text="'$' + ${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')}">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const body = document.body;
+            
+            if (savedTheme === 'dark') {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naya Natural Cosmetics</title>
+    <link rel="icon" type="image/x-icon" href="/imagenes/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: #C9A687;
+            border-radius: 50%;
+            opacity: 0.6;
+            box-shadow: 0 0 10px #C9A687;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .logo-text {
+            font-size: 5rem;
+            font-weight: 300;
+            color: #C9A687;
+            letter-spacing: 15px;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(201, 166, 135, 0.5);
+            animation: fadeIn 1s;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            color: #D4B59E;
+            letter-spacing: 3px;
+            margin-bottom: 4rem;
+            animation: fadeIn 1.5s;
+        }
+        
+        .enter-button {
+            display: inline-block;
+            padding: 1.2rem 4rem;
+            background: rgba(201, 166, 135, 0.1);
+            color: #C9A687;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            border: 2px solid #C9A687;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: #C9A687;
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+        
+        .enter-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+        
+        .enter-button:hover {
+            color: #000000;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(201, 166, 135, 0.4);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .logo-text { font-size: 3rem; letter-spacing: 8px; }
+            .tagline { font-size: 1.1rem; }
+            .enter-button { padding: 1rem 3rem; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="logo-text">NY<br>NAYA</div>
+        <p class="tagline">RENOVACIÓN PROFUNDA EN TU PIEL</p>
+        <a href="/tienda" class="enter-button">ENTRAR</a>
+    </div>
+    
+    <script>
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 80;
+        
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 5 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight + 10;
+            particle.style.left = startX + 'px';
+            particle.style.top = startY + 'px';
+            
+            particlesContainer.appendChild(particle);
+            
+            animateParticle(particle, startX, startY);
+        }
+        
+        function animateParticle(particle, startX, startY) {
+            let posY = startY;
+            let posX = startX;
+            const speed = Math.random() * 2 + 1;
+            const drift = (Math.random() - 0.5) * 0.5;
+            
+            function move() {
+                posY -= speed;
+                posX += drift;
+                
+                particle.style.top = posY + 'px';
+                particle.style.left = posX + 'px';
+                
+                if (posY < -10) {
+                    particle.remove();
+                    createParticle();
+                } else {
+                    requestAnimationFrame(move);
+                }
+            }
+            
+            move();
+        }
+        
+        for (let i = 0; i < particleCount; i++) {
+            setTimeout(() => createParticle(), i * 100);
+        }
+    </script>
+</body>
+</html>
